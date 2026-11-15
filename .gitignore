@@ -1,0 +1,25 @@
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Compilazione C++ / Makefiles ---
+*.o
+*.a
+*.so
+*.dylib
+*.out
+*.exe
+build/
+bin/
+*.dSYM/
+
+# --- CERN ROOT (File di output o dati temporanei) ---
+*.root
+
+# --- Editor (Emacs / backup) ---
+*~
+#*#
+.emacs.desktop
+.emacs.desktop.lock
+*.elc

@@ -29,7 +29,7 @@ Vector3 ForzaEsterna(unsigned int i, double t, vector<MatPoint> p){
     double theta = p[i].R().X();
     double theta_primo = p[i].V().X();
 
-    double theta_safe = (theta > 0.0) ? theta : 0.0; //controlla questo pezzo!!!
+    double theta_safe = (theta > 0.0) ? theta : 0.0;
     double t_safe = (t > 1e-12) ? t : 1e-12;
 
     double theta_secondo = (-2/t_safe)*theta_primo - pow(theta_safe, n);

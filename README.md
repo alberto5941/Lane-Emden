@@ -54,7 +54,7 @@ ogni n.
 teorica prevista, vale a dire il seno cardinale. Usando questa soluzione, possiamo confrontare l'errore commesso
 integrando numericamente. Dimezziamo il passo, calcoliamo nuovamente l'errore e stimiamo in questo modo
 l'ordine di convergenza. Definiamo:
-    p = \log_2 \left( \frac{E(h)}{E(h/2)} \right)
+    p = log(E(h)/E(h/2)) / log(2)
 - Nell'ultima canvas viene disegnata la soluzione che si ottiene con n=5. Quello che si osserva è che
 in questo caso non ci sono intersezioni della soluzione con l'asse delle x.
 

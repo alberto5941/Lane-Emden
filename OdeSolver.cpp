@@ -34,7 +34,7 @@ double OdeSolver::DeltaT(){
 }
 
 
-Vector3 OdeSolver::m_A(unsigned int i, double t, vector<MatPoint> p){
+Vector3 OdeSolver::m_A(unsigned int i, double t, const vector<MatPoint>& p){
 
   Vector3 FTot = Vector3();
   unsigned int n = p.size();
@@ -51,7 +51,6 @@ Vector3 OdeSolver::m_A(unsigned int i, double t, vector<MatPoint> p){
 }
 
 void OdeSolver::Step(){
-
   if (m_method=="Eulero"){
     vector<Vector3>  k1(m_p.size());
     vector<Vector3>  w1(m_p.size());
@@ -64,15 +63,13 @@ void OdeSolver::Step(){
       m_p[i].R(m_p[i].R() + k1[i]);
       m_p[i].V(m_p[i].V() + w1[i]);
     }
-
+    m_t += m_h;
   } else if (m_method=="Rk2"){
 
     vector<Vector3> k1(m_p.size());
     vector<Vector3> w1(m_p.size());
     vector<Vector3> k2(m_p.size());
     vector<Vector3> w2(m_p.size());
-    vector<Vector3> x_int(m_p.size());
-    vector<Vector3> v_int(m_p.size());
 
     for (unsigned int i=0;i<m_p.size();i++){
       k1[i] = m_p[i].V();
@@ -104,8 +101,6 @@ void OdeSolver::Step(){
     vector<Vector3> w3(m_p.size());
     vector<Vector3> k4(m_p.size());
     vector<Vector3> w4(m_p.size());
-    vector<Vector3> x_int(m_p.size());
-    vector<Vector3> v_int(m_p.size());
 
     for(unsigned int i=0;i<m_p.size(); i++) {
       k1[i] = m_p[i].V();

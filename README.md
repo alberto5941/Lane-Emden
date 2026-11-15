@@ -15,7 +15,7 @@ $\frac{d^2\theta}{d\xi^2} = -\frac{2}{\xi}\frac{d\theta}{d\xi} - \theta^n,
 - Trova il primo zero $\xi_1$ per interpolazione lineare
 - Ricava a e $\rho_C$ imponendo
   massa e raggio del Sole
-- Disegna $\theta(\xi)$, $\rho(r)$ in scala logaritmica e m(r)/M in 3 canvas separate
+- Disegna $\theta(\xi)$, $\rho(r)$ in scala logaritmica e m(r)/M in canvas separate
 
 ## Organizzazione dei file
 
@@ -50,7 +50,7 @@ e lo salviamo.
 ogni n.
 - In una diversa canvas facciamo il grafico di $\rho(r)$ in scala logaritmica.
 - In un'altra canvas facciamo il grafico di m(r)/M, dove M rappresenta la massa del Sole.
-- In una canvas diversa confrontiamo la soluzione ottenuta numericamente per n=0 con la soluzione
+- In una canvas diversa confrontiamo la soluzione ottenuta numericamente per n=1 con la soluzione
 teorica prevista, vale a dire il seno cardinale. Usando questa soluzione, possiamo confrontare l'errore commesso
 integrando numericamente. Dimezziamo il passo, calcoliamo nuovamente l'errore e stimiamo in questo modo
 l'ordine di convergenza. Definiamo:
@@ -74,15 +74,16 @@ in questo caso non ci sono intersezioni della soluzione con l'asse delle x.
 | n   | xi_1   | a [m]       | $\rho_C$ [kg/m³] |
 |-----|---------|-------------|------------------|
 | 1   | 3.14178 | 2.21435e+08 | 4638.8           |
-| 1.5 | 3.65383 | 1.90403e+0  | 8445.6           |
+| 1.5 | 3.65383 | 1.90403e+08 | 8445.6           |
 | 3   | 6.89692 | 1.00871e+08 | 76385            |
 
-Il valore di riferimento per i modelli solari di $\rho_C è 1.6 \times 10^{5}\ \mathrm{kg/m^{3}}$.
+Il valore di riferimento per i modelli solari di $\rho_C$ è 1.6 $\times 10^{5}\ \mathrm{kg/m^{3}}$.
 L'indice che lo approssima meglio risulta quindi n=3.
 
-Confrontando la soluzione numerica per n=0 con il seno cardinale, osserviamo che abbiamo ottenuto un'ottima approssimazione della soluzione.
+Confrontando la soluzione numerica per n=1 con il seno cardinale, osserviamo che abbiamo ottenuto un'ottima approssimazione della soluzione.
 
-Per n=5 non ci sono intersezioni con l'asse x. Questo non ha fisicamente senso, perché implicherebbe che il Sole ha raggio infinito.
+Per n=5 non ci sono intersezioni con l'asse x. La soluzione analitica non si annulla mai, dal momento che il modello per n=5 descrive una
+stella con raggio infinito.
 
 Per quanto riguarda la stima della convergenza, abbiamo ottenuto:
 

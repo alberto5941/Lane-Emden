@@ -1,11 +1,11 @@
 #include "OdeSolver.h"
 #include "Vector3.h"
 #include "MatPoint.h"
-
 #include <cmath>
 #include <fstream>
 #include <vector>
-
+#include <iostream>
+#include <string>
 #include <TGraph.h>
 #include <TMultiGraph.h>
 #include <TF1.h>
@@ -77,9 +77,9 @@ int main() {
 
     //vector per salvare i punti
     vector<double> R1, V1; //vector in cui salvo il primo zero e la derivata in quel punto, per ogni valore di n
+    vector<vector<double>> vec_theta(3);
+    vector<vector<double>> vec_theta_primo(3);
     vector<vector<double>> vec_xi(3);
-    vector<vector<double>> vec_V(3);
-    vector<vector<double>> tempi(3);
 
     cout << endl;
 
@@ -87,55 +87,51 @@ int main() {
 
         OdeSolver ode = vec_ode[j];
         n = lista_n[j];
-        vector<double>& vec_j = vec_xi[j];
-        vector<double>& vecV_j = vec_V[j];
-        vector<double>& tmp = tempi[j];
+        vector<double>& vec_j = vec_theta[j];
+        vector<double>& vecV_j = vec_theta_primo[j];
+        vector<double>& tmp = vec_xi[j];
 
 
         TGraph *gr = new TGraph();
         gr->SetLineColor(colori[j]);
         gr->SetLineWidth(2);
 
-        double x_prec = ode.GetMatPoint(0).R().X();
-        double v_prec = ode.GetMatPoint(0).V().X();
-        double t_prec;
+        double theta_prec = ode.GetMatPoint(0).R().X();
+        double theta_primo_prec = ode.GetMatPoint(0).V().X();
+        double xi_prec;
 
         unsigned int k=0;
         gr->SetPoint(0,0,1);
 
         //ciclo while con il metodo Step()
         while (ode.T()<7){
-            x_prec = ode.GetMatPoint(0).R().X();
-            v_prec = ode.GetMatPoint(0).V().X();
-            t_prec = ode.T();
+            theta_prec = ode.GetMatPoint(0).R().X();
+            theta_primo_prec = ode.GetMatPoint(0).V().X();
+            xi_prec = ode.T();
             k = k+1;
             ode.Step();
-            double x = ode.GetMatPoint(0).R().X();
-            double v = ode.GetMatPoint(0).V().X();
-            double t = ode.T();
-            vec_j.push_back(x);
-            vecV_j.push_back(v);
-            tmp.push_back(t);
-            if(x<=0) {
-                double xi1 = t_prec - x_prec*((t-t_prec)/(x-x_prec)); //interpolazione lineare
-                double v1 = v_prec + ((xi1-t_prec)/(t-t_prec))*(v-v_prec); //interpolazione lineare
+            double theta = ode.GetMatPoint(0).R().X();
+            double theta_primo = ode.GetMatPoint(0).V().X();
+            double xi = ode.T();
+            if(theta<=0) {
+                double xi1 = xi_prec - theta_prec*((xi-xi_prec)/(theta-theta_prec)); //interpolazione lineare
+                double theta_primo1 = theta_primo_prec + ((xi1-xi_prec)/(xi-xi_prec))*(theta_primo-theta_primo_prec); //interpolazione lineare
                 R1.push_back(xi1);
-                V1.push_back(v1);
-                cout << xi1 << endl;
-                cout << "grafico " << j << ": " << "primo zero in " << xi1 << endl;
+                V1.push_back(theta_primo1);
                 break;
             }
-            gr->SetPoint(k,t_prec,x_prec);
+            vec_j.push_back(theta);
+            vecV_j.push_back(theta_primo);
+            tmp.push_back(xi);
+            gr->SetPoint(k,xi_prec,theta_prec);
         }
         mg->Add(gr);
         leg->AddEntry(gr, etichette[j].c_str(), "l");
         mg->GetXaxis()->SetTitle("#xi");
         mg->GetYaxis()->SetTitle("#theta");
     }
-
     mg->Draw("AL");
     leg->Draw();
-
 
     //creo una nuova canvas per disegnare l'andamento
     //della densità per i diversi valori di n
@@ -165,7 +161,6 @@ int main() {
         vec_a.push_back(a);
         vec_rhoC.push_back(rho_C);
 
-
         cout << endl;
         cout << "n = " << n << endl;
         cout << "xi = " << xi1 << endl;
@@ -173,8 +168,8 @@ int main() {
         cout << "rho_C = " << rho_C << " kg/m^3" << endl;
         cout << endl;
 
-        vector<double> vec = vec_xi[t];
-        vector<double> tmp = tempi[t];
+        vector<double> vec = vec_theta[t];
+        vector<double> tmp = vec_xi[t];
         vector<double> rho;
         TGraph *gr = new TGraph();
         gr->SetLineColor(colori[t]);
@@ -213,21 +208,21 @@ int main() {
         cout << endl;
         vector<double> vec_m;
         double a = vec_a[t];
-        vector<double> tmp = tempi[t];
-        vector<double> vecV = vec_V[t];
+        vector<double> vecXi = vec_xi[t];
+        vector<double> vecThetaPrimo = vec_theta_primo[t];
 
         TGraph *graph = new TGraph();
 
         double r1 = R1[t];
         double v1 = V1[t];
 
-        for(unsigned int k=0; k<tmp.size(); k++) {
+        for(unsigned int k=0; k<vecXi.size(); k++) {
             //calcolo di m(r)
-            double C = pow(tmp[k]*(1/r1), 2);
-            double D = vecV[k]*(1/v1);
+            double C = pow(vecXi[k]*(1/r1), 2);
+            double D = vecThetaPrimo[k]*(1/v1);
             double m = C*D;
             vec_m.push_back(m);
-            graph->SetPoint(k, 0.001*a*tmp[k], vec_m[k]);
+            graph->SetPoint(k, 0.001*a*vecXi[k], vec_m[k]);
         }
         graph->SetLineColor(colori[t]);
         graph->SetLineWidth(2);
@@ -247,8 +242,8 @@ int main() {
 
     TCanvas *c4 = new TCanvas("c4", "Confronto con seno cardinale");
     c4->cd();
-    vector<double> tmp = tempi[0];
-    vector<double> vec = vec_xi[0];
+    vector<double> vecXi = vec_xi[0];
+    vector<double> vecTheta = vec_theta[0];
     TF1 *f = new TF1("f", "sin(x)/x", 0.01, R1[0]);
     TGraph *gr = new TGraph();
     gr->SetTitle("#theta(#xi)(n=1)");
@@ -256,13 +251,12 @@ int main() {
 
     TLegend *leg4 = new TLegend(0.65, 0.70, 0.90, 0.90);
 
-    for(unsigned int k=0; k<tmp.size(); k++) {
-        gr->SetPoint(k, tmp[k], vec[k]);
+    for(unsigned int k=0; k<vecXi.size(); k++) {
+        gr->SetPoint(k, vecXi[k], vecTheta[k]);
     }
 
     f->SetLineColor(kBlue);
     f->Draw();
-
 
     gr->GetXaxis()->SetTitle("#xi");
     gr->GetYaxis()->SetTitle("#theta");
@@ -270,8 +264,8 @@ int main() {
     gr->SetLineColor(colori[0]);
     gr->Draw("same");
 
-    leg4->AddEntry(gr);
-    leg4->AddEntry(f);
+    leg4->AddEntry(gr, "RK4", "p");
+    leg4->AddEntry(f, "sin(#xi)/#xi", "l");
     leg4->Draw();
 
     //Stimiamo l'ordine di convergenza di xi1 al dimezzare del passo
@@ -288,22 +282,22 @@ int main() {
     ode2.DeltaT(passo/2);
     ode2.T(0.01);
 
-    double x_prec = ode2.GetMatPoint(0).R().X();
-    double t_prec = ode2.T();
+    double theta_prec = ode2.GetMatPoint(0).R().X();
+    double xi_prec = ode2.T();
     double xi_1=0;
 
     unsigned int y=0;
 
     //ciclo while con il metodo Step()
     while (ode2.T()<7){
-        x_prec = ode2.GetMatPoint(0).R().X();
-        t_prec = ode2.T();
+        theta_prec = ode2.GetMatPoint(0).R().X();
+        xi_prec = ode2.T();
         y = y+1;
         ode2.Step();
-        double t = ode2.T();
-        double x = ode2.GetMatPoint(0).R().X();
-        if(x<=0) {
-            xi_1 = t_prec - x_prec*((t-t_prec)/(x-x_prec)); //interpolazione lineare
+        double xi = ode2.T();
+        double theta = ode2.GetMatPoint(0).R().X();
+        if(theta<=0) {
+            xi_1 = xi_prec - theta_prec*((xi-xi_prec)/(theta-theta_prec));
             break;
         }
     }
@@ -343,13 +337,13 @@ int main() {
 
     while (ode3.T()<100){
         ode3.Step();
-        double x = ode3.GetMatPoint(0).R().X();
-        double t = ode3.T();
-        graph->SetPoint(k,t,x);
+        double theta = ode3.GetMatPoint(0).R().X();
+        double xi = ode3.T();
+        graph->SetPoint(k,xi,theta);
         k = k+1;
     }
 
-    graph->Draw();
+    graph->Draw("AL");
 
     app.Run(true);
 

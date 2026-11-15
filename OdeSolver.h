@@ -26,7 +26,7 @@ class OdeSolver{
   string   m_method;
   vector<MatPoint> m_p;
   double   m_t,m_h;
-  Vector3  m_A(unsigned int i, double t, vector<MatPoint>);
+  Vector3  m_A(unsigned int i, double t, const vector<MatPoint>&);
 };
 
 

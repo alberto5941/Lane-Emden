@@ -13,6 +13,7 @@
 build/
 bin/
 *.dSYM/
+main
 
 # --- CERN ROOT (File di output o dati temporanei) ---
 *.root

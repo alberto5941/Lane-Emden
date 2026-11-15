@@ -90,4 +90,4 @@ Per quanto riguarda la stima della convergenza, abbiamo ottenuto:
 p = 2.25362
 
 Il valore atteso con Runge-Kutta 4 sarebbe 4. Il motivo per cui otteniamo un valore minore potrebbe essere che l'interpolazione lineare,
-sfruttata per ottenere il valore di $\xi_1$ peggiora leggermente la convergenza dell'algoritmo.
+sfruttata per ottenere il valore di $\xi_1$, peggiora leggermente la convergenza dell'algoritmo.

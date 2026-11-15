@@ -2,7 +2,10 @@
 
 Integrazione numerica dell'equazione di Lane-Emden con il metodo di
 Runge-Kutta del quarto ordine (RK4), per modellare il Sole come stella
-politropica.
+politropica. L'obiettivo è risolvere numericamente l'equazione per diversi indici,
+ricavando le principali proprietà delle soluzioni.
+Inoltre, si confrontano i risultati con soluzioni analitiche, se note, e con i
+valori di riferimento del Sole.
 
 Si pone $\rho(r) = \rho_C \theta^n(\xi)$ e $r = a\xi.$
 Si ottiene l'equazione di Lane-Emden:
@@ -78,7 +81,7 @@ in questo caso non ci sono intersezioni della soluzione con l'asse delle x.
 | 3   | 6.89692 | 1.00871e+08 | 76385            |
 
 Il valore di riferimento per i modelli solari di $\rho_C$ è 1.6 $\times 10^{5}\ \mathrm{kg/m^{3}}$.
-L'indice che lo approssima meglio risulta quindi n=3.
+L'indice che lo approssima meglio risulta quindi n=3, anche se non riproduce perfettamente i valori noti del Sole.
 
 Confrontando la soluzione numerica per n=1 con il seno cardinale, osserviamo che abbiamo ottenuto un'ottima approssimazione della soluzione.
 

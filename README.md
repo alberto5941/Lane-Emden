@@ -73,7 +73,7 @@ l'ordine di convergenza. Definiamo:
 
 ## Risultati
 
-| n   | xi_1   | a [m]       | $\rho_C$ [kg/m³] |
+| n   | xi_1    | a [m]       | $\rho_C$ [kg/m³] |
 |-----|---------|-------------|------------------|
 | 1   | 3.14178 | 2.21435e+08 | 4638.8           |
 | 1.5 | 3.65383 | 1.90403e+08 | 8445.6           |
@@ -93,3 +93,8 @@ p = 2.25362
 
 Il valore atteso con Runge-Kutta 4 sarebbe 4. Il motivo per cui otteniamo un valore minore potrebbe essere che l'interpolazione lineare,
 sfruttata per ottenere il valore di $\xi_1$, peggiora leggermente la convergenza dell'algoritmo.
+
+
+# Utilizzo dell'intelligenza artificiale
+
+L'intelligenza artificiale è stata utilizzata per il debugging e per migliorare l'aspetto grafico del progetto.
